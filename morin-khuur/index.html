@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Exhibit - The Ancient Artifact</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/22.4.6/i18next.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #2a2a2a;
+            --secondary-color: #555555;
+            --accent-color: #c99d66;
+            --background-color: #f9f9f9;
+            --light-gray: #f5f5f5;
+            --off-white: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+        
+        header {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 4rem auto;
+            background: var(--off-white);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .exhibit-content {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 992px) {
+            .exhibit-content {
+                grid-template-columns: 1fr 1fr;
+                min-height: 650px;
+            }
+        }
+        
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: var(--light-gray);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+        
+        .exhibit-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            z-index: 0;
+        }
+        
+        .image-container:hover .exhibit-image {
+            transform: scale(1.03);
+        }
+        
+        .description-container {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .description-container::before {
+            content: "";
+            position: absolute;
+            top: 3rem;
+            left: 4rem;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: left;
+            margin-top: 1.8rem;
+        }
+        
+        .description h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            color: var(--primary-color);
+            margin-bottom: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .description p {
+            margin-bottom: 1.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .artifact-details {
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        }
+        
+        .artifact-details h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .artifact-details p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+        
+        .audio-guide {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background-color: var(--light-gray);
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        }
+        
+        .audio-control {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .audio-control::before {
+            content: "▶";
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .audio-control:hover {
+            transform: scale(1.1);
+            background-color: #b48a55;
+        }
+        
+        .audio-info {
+            flex: 1;
+        }
+        
+        .audio-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary-color);
+        }
+        
+        .audio-info p {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+        
+        .audio-progress {
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 0.8rem;
+            position: relative;
+        }
+        
+        .audio-progress::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 20%;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.95rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            line-height: 1.7;
+        }
+        
+        .language-selector {
+            padding: 0.7rem 1rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            padding-right: 2.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+        }
+        
+        .language-selector:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .flag-option {
+            padding-left: 35px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 20px 14px;
+            color: var(--text-color);
+        }
+        
+        .option-en { background-image: url('https://flagcdn.com/w40/gb.png'); }
+        .option-mn { background-image: url('https://flagcdn.com/w40/mn.png'); }
+        .option-ru { background-image: url('https://flagcdn.com/w40/ru.png'); }
+        .option-ko { background-image: url('https://flagcdn.com/w40/kr.png'); }
+        .option-ch { background-image: url('https://flagcdn.com/w40/cn.png'); }
+        
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                width: 95%;
+                margin: 2rem auto;
+            }
+            
+            .description-container {
+                padding: 2.5rem;
+            }
+            
+            .description-container::before {
+                left: 2.5rem;
+            }
+            
+            .description h2 {
+                font-size: 2.2rem;
+            }
+            
+            .image-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .description-container {
+                padding: 2rem;
+            }
+            
+            .description h2 {
+                font-size: 1.8rem;
+            }
+            
+            .artifact-details {
+                padding: 1.5rem;
+            }
+            
+            .audio-guide {
+                border-radius: 16px;
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img class="logo" src="https://chinggismuseum.com/_next/image?url=%2Fnew_logo_en.png&w=128&q=75" alt="Museum Logo">
+            <h1 data-i18n="name"></h1>
+        </div>
+        <select id="language-selector" class="language-selector">
+            <option value="en" class="flag-option option-en">English</option>
+            <option value="mn" class="flag-option option-mn">Монгол</option>
+            <option value="ru" class="flag-option option-ru">Русский</option>
+            <option value="ko" class="flag-option option-ko">한국어</option>
+            <option value="ch" class="flag-option option-ch">中文</option>
+        </select>
+    </header>
+    
+    <div class="container">
+        <div class="exhibit-content">
+            <div class="image-container">
+                <div class="image-overlay"></div>
+                <img class="exhibit-image" src="https://uuguul.com/wp-content/uploads/2024/08/pro_khuur_picture001.jpg" alt="Morin Khuur - Horsehead Fiddle">
+            </div>
+            <div class="description-container">
+                <div class="description">
+                    <h2 data-i18n="title"></h2>
+                    <p data-i18n="description"></p>
+                    
+                    <div class="artifact-details">
+                        <h3 data-i18n="specification"></h3>
+                        <p data-i18n="spec"></p>
+                    </div>
+                    
+                    <div class="audio-guide">
+                        <a href="https://youtube.com/shorts/ZX5EIP9oNVY?si=CS3W9wxY4t1MQ5jN">
+                            <div class="audio-control"></div>
+                        </a>
+                        <div class="audio-info">
+                            <h4 data-i18n="audio"></h4>
+                            <p data-i18n="audio_text"></p>
+                            <div class="audio-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div data-i18n="phone"></div>
+        <div data-i18n="address"></div>
+        <div data-i18n="timetable"></div>
+    </footer>
+    
+    <script>
+        const resources = {
+            en: {
+                translation: {
+                    name: "Chinggis Khaan Museum",
+                    title: "Morin Khuur (Horsehead Fiddle)",
+                    description: "Consists of three parts: neck, body, and bow. It features a green skin top, white horsehead with two cotton ears, and a movable tongue. Unpainted twin ears act as tuners. Beneath the horse head is a white horn carved into a blue dragon head. The neck is intricately carved with five livestock, eternal knot, butterflies, and coin patterns, strung with horse tail hair. The bow is made of fine, rainbow-painted willow. The top of the body is decorated with two children in red clothes riding horses.",
+                    specification: "Artifact Specifications",
+                    spec: "Length: 69cm, Height: 110cm, Thickness: 9cm, Body Width: 29cm",
+                    audio: "Audio Guide",
+                    audio_text: "Watch the recording of the Morin Khuur",
+                    phone: "Phone: +976-7021-2222",
+                    address: "Address: Chinggis Khaan Museum, Ulaanbaatar, Mongolia",
+                    timetable: "Open: Monday – Sunday, 9:00 AM – 6:00 PM"
+                }
+            },
+            mn: {
+                translation: {
+                    name: "Чингис хаан музей",
+                    title: "Морин хуур",
+                    description: "Иш, цар, нум гэсэн гурван хэсгээс бүрдсэн. Ногоон дэлтэй, цагаан халзан морин толгойны хоёр соотон чих, хэл нь сууриндаа хөдөлдөг. Будаггүй хос чих буюу хөтлөгчтэй. Морин толгойн доод хэсэгт цагаан эвэртэй, хөх лууны толгойг сийлж гоёсон. Хуурын шилбэнд таван хошуу мал, өлзий, эрвээхэй, зоосон зэрэг олон хээг дараалуулан сийлж, бор морины сүүлээр хос чавхдас татсан. Өнгийн будгаар солонгоруулан будсан нарийн бургасан нумтай. Царын дээд хэсэгт шилбэний угийн хоёр талд улаан өнгийн хувцастай морь унасан хоёр хүүхэд сийлсэн.",
+                    specification: "Олдворын тодорхойлолт",
+                    spec: "Урт: 69см, Өндөр: 110см, Зузаан: 9см, Царны өргөн 29 см",
+                    audio: "Аудио хөтөч",
+                    audio_text: "Морин хуурын бичлэгийг үзээрэй",
+                    phone: "Утас: +976-7021-2222",
+                    address: "Хаяг: Чингис хаан музей, Улаанбаатар, Монгол",
+                    timetable: "Нээлттэй: Даваа – Ням, 09:00 – 18:00"
+                }
+            },
+            ru: {
+                translation: {
+                    name: "Музей Чингисхана",
+                    title: "Морин хуур (Скрипка с головой лошади)",
+                    description: "Состоит из трех частей: гриф, корпус и смычок. Зеленая верхняя часть, белая лошадиная голова с двумя хлопковыми ушами, подвижный язык. Без краски, с двумя ушами-настройками. Под головой вырезан синий дракон с белым рогом. На грифе вырезаны пять видов скота, бесконечный узел, бабочки, монеты. Струны — из конского хвоста. Смычок — из тонкой и разноцветно окрашенной ивы. На верхней части корпуса изображены два ребенка в красной одежде, верхом на лошадях.",
+                    specification: "Характеристики экспоната",
+                    spec: "Длина: 69см, Высота: 110см, Толщина: 9см, Ширина корпуса: 29см",
+                    audio: "Аудиогид",
+                    audio_text: "Посмотрите запись Морин хуура",
+                    phone: "Телефон: +976-7021-2222",
+                    address: "Адрес: Музей Чингисхана, Улан-Батор, Монголия",
+                    timetable: "Часы работы: Понедельник – Воскресенье, 9:00 – 18:00"
+                }
+            }, 
+            ko: {
+                translation: {
+                    name: "칭기즈 칸 박물관",
+                    title: "모린호르 (말머리 바이올린)",
+                    description: "목, 몸통, 활 세 부분으로 구성됨. 초록색 가죽 덮개와 흰 말머리에 솜 귀 두 개, 움직이는 혀가 있음. 무도색 조율용 귀 있음. 머리 아래는 흰 뿔이 달린 푸른 용의 머리가 조각됨. 목에는 다섯 가축, 영원의 매듭, 나비, 동전 등의 무늬가 새겨져 있으며, 갈색 말의 꼬리로 줄을 맨 것. 무지갯빛 색칠된 얇은 버드나무 활 사용. 몸통 윗부분에는 빨간 옷을 입고 말을 타고 있는 두 아이가 조각되어 있음.",
+                    specification: "유물 사양",
+                    spec: "길이: 69cm, 높이: 110cm, 두께: 9cm, 몸통 폭: 29cm",
+                    audio: "오디오 가이드",
+                    audio_text: "모린호르 연주 영상을 시청하세요",
+                    phone: "전화: +976-7021-2222",
+                    address: "주소: 칭기즈 칸 박물관, 울란바토르, 몽골",
+                    timetable: "운영 시간: 월–일, 오전 9시 – 오후 6시"
+                }
+            },
+            ch: {
+                translation: {
+                    name: "成吉思汗博物馆",
+                    title: "马头琴",
+                    description: "由琴颈、琴箱、琴弓三部分组成。绿色琴面，白色马头，有两只棉质耳朵和可动的舌头。未上色的调音耳。马头下方刻有带白角的蓝龙头。琴颈雕刻有五畜、吉祥结、蝴蝶、铜钱等花纹，用马尾弦弦。琴弓为彩绘柳条制成。在琴箱上部刻有两位穿红衣骑马的儿童图案。",
+                    specification: "文物规格",
+                    spec: "长度：69厘米，高度：110厘米，厚度：9厘米，琴箱宽度：29厘米",
+                    audio: "音频导览",
+                    audio_text: "观看马头琴的演奏录像",
+                    phone: "电话: +976-7021-2222",
+                    address: "地址：蒙古乌兰巴托 成吉思汗博物馆",
+                    timetable: "开放时间：周一至周日，9:00 – 18:00"
+                }
+            }
+        };
+
+        i18next.init({
+            lng: 'en',
+            debug: true,
+            resources
+        }, function(err, t) {
+            updateContent();
+        });
+
+        function updateContent() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerHTML = i18next.t(key);
+            });
+        }
+
+        document.getElementById('language-selector').addEventListener('change', function() {
+            const selectedLang = this.value;
+            i18next.changeLanguage(selectedLang, () => {
+                updateContent();
+            });
+        });
+    </script>
+</body>
+</html>
