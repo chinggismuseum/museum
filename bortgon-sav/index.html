@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Exhibit - The Ancient Artifact</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/22.4.6/i18next.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #2a2a2a;
+            --secondary-color: #555555;
+            --accent-color: #c99d66;
+            --background-color: #f9f9f9;
+            --light-gray: #f5f5f5;
+            --off-white: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+        
+        header {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 4rem auto;
+            background: var(--off-white);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .exhibit-content {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+        
+        @media (min-width: 992px) {
+            .exhibit-content {
+                grid-template-columns: 1fr 1fr;
+                min-height: 650px;
+            }
+        }
+        
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            background-color: var(--light-gray);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+        
+        .exhibit-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            z-index: 0;
+        }
+        
+        .image-container:hover .exhibit-image {
+            transform: scale(1.03);
+        }
+        
+        .description-container {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .description-container::before {
+            content: "";
+            position: absolute;
+            top: 3rem;
+            left: 4rem;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: left;
+            margin-top: 1.8rem;
+        }
+        
+        .description h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            color: var(--primary-color);
+            margin-bottom: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .description p {
+            margin-bottom: 1.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .artifact-details {
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        }
+        
+        .artifact-details h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .artifact-details p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+        
+        .audio-guide {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background-color: var(--light-gray);
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+        }
+        
+        .audio-control {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .audio-control::before {
+            content: "▶";
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .audio-control:hover {
+            transform: scale(1.1);
+            background-color: #b48a55;
+        }
+        
+        .audio-info {
+            flex: 1;
+        }
+        
+        .audio-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--primary-color);
+        }
+        
+        .audio-info p {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+        
+        .audio-progress {
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 0.8rem;
+            position: relative;
+        }
+        
+        .audio-progress::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 20%;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.95rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            line-height: 1.7;
+        }
+        
+        .language-selector {
+            padding: 0.7rem 1rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            padding-right: 2.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+        }
+        
+        .language-selector:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .flag-option {
+            padding-left: 35px;
+            background-repeat: no-repeat;
+            background-position: 10px center;
+            background-size: 20px 14px;
+            color: var(--text-color);
+        }
+        
+        .option-en { background-image: url('https://flagcdn.com/w40/gb.png'); }
+        .option-mn { background-image: url('https://flagcdn.com/w40/mn.png'); }
+        .option-ru { background-image: url('https://flagcdn.com/w40/ru.png'); }
+        .option-ko { background-image: url('https://flagcdn.com/w40/kr.png'); }
+        .option-ch { background-image: url('https://flagcdn.com/w40/cn.png'); }
+        
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                width: 95%;
+                margin: 2rem auto;
+            }
+            
+            .description-container {
+                padding: 2.5rem;
+            }
+            
+            .description-container::before {
+                left: 2.5rem;
+            }
+            
+            .description h2 {
+                font-size: 2.2rem;
+            }
+            
+            .image-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .description-container {
+                padding: 2rem;
+            }
+            
+            .description h2 {
+                font-size: 1.8rem;
+            }
+            
+            .artifact-details {
+                padding: 1.5rem;
+            }
+            
+            .audio-guide {
+                border-radius: 16px;
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://chinggismuseum.com/_next/image?url=%2Fnew_logo_en.png&w=128&q=75" />
+        <h1 data-i18n="name"></h1>
+        <select id="language-selector" class="language-selector">
+            <option value="en" class="flag-option option-en">English</option>
+            <option value="mn" class="flag-option option-mn">Монгол</option>
+            <option value="ru" class="flag-option option-ru">Русский</option>
+            <option value="ko" class="flag-option option-ko">한국어</option>
+            <option value="ch" class="flag-option option-ch">中文</option>
+        </select>
+    </header>
+    <div class="container">
+        <div class="exhibit-content">
+            <div class="image-container">
+                <div class="image-overlay"></div>
+                <img class="exhibit-image" src="https://chinggismuseum.com/_next/image?url=https%3A%2F%2Fmuseum-dashboard.s3.ap-southeast-1.amazonaws.com%2Frte-images%2Fma94f.png&w=384&q=75" alt="Ancient Bronze Cauldron - Хүрэл тогоо">
+            </div>
+            <div class="description-container">
+                <div class="description">
+                    <h2 data-i18n="title"></h2>
+                    <p data-i18n="description"></p>
+                    
+                    <div class="artifact-details">
+                        <h3 data-i18n="specification"></h3>
+                        <p data-i18n="spec"></p>
+                    </div>
+                    
+                    <div class="audio-guide">
+                        <div class="audio-control"></div>
+                        <div class="audio-info">
+                            <h4 data-i18n="audio"></h4>
+                            <p data-i18n="audio_text"></p>
+                            <div class="audio-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <footer data-i18n="footer"></footer>
+    <script>
+        const resources = {
+            en: {
+                translation: {
+                    name: "Chingis Khan Museum",
+                    title: "Cylindrical Container",
+                    description: "A small cylindrical brass container with a lid. The lid is decorated with a woven pattern, and the top is slightly raised. The body features an engraved design depicting a noble sitting with his queen, musicians, and attendants on both sides, while the bottom is adorned with a sun-ray patterned engraving.",
+                    specification: "Artifact Description",
+                    spec: "Height: 7.5 cm, Diameter: 4 cm",
+                    audio: "Audio Guide",
+                    audio_text: "Listen to the history of this ancient bronze cauldron",
+                    historical: "Historical Context",
+                    similar: "Similar Artifacts",
+                    footer: "© 2025 Museum of Ancient Wonders | Unlocking History, One Artifact at a Time"
+                }
+            },
+            mn: {
+                translation: {
+                    name: "Чингис хаан музей",
+                    title: "Бортгон сав",
+                    description: "Бортого хэлбэртэй, тагтай жижиг гуулин сав. Тагийг сүлжмэл хээгээр чимэглэж, оройн хэсгийг дээш овойлгон хийсэн. Эх биеийн бөөрний хэсэгт язгууртан, хатны хамт суун хоёр талаар нь хөгжимчид, үйлчлэгч нарыг, ёроолд нь нарны цацраг хэлбэрийн зураасан хээ сийлсэн.",
+                    specification: "Олдворын тодорхойлолт",
+                    spec: "Өндөр: 7.5см, Диаметр: 4см",
+                    audio: "Аудио хөтөч",
+                    audio_text: "Эртний энэ хүрэл тогооны түүхийг сонсоорой",
+                    historical: "Түүхэн утга учир",
+                    similar: "Төстэй олдворууд",
+                    footer: "© 2025 Эртний гайхамшгуудын музей | Түүхийг нэгэн олдвороор тайлж байна"
+                }
+            },
+            ru: {
+                translation: {
+                    name: "Музей Чингисхана",
+                    title: "Цилиндрический контейнер",
+                    description: "Небольшой цилиндрический латунный сосуд с крышкой. Крышка украшена плетеным узором, а верхняя часть слегка приподнята. На теле выгравировано изображение знатного человека, сидящего с царицей, музыкантами и слугами по бокам. На дне выгравирован орнамент в виде солнечных лучей.",
+                    specification: "Описание артефакта",
+                    spec: "Высота: 7.5 см, Диаметр: 4 см",
+                    audio: "Аудиогид",
+                    audio_text: "Послушайте историю этого древнего бронзового котла",
+                    historical: "Исторический контекст",
+                    similar: "Похожие артефакты",
+                    footer: "© 2025 Музей древних чудес | Раскрывая историю, один артефакт за раз"
+                }
+            }, 
+            ko: {
+                translation: {
+                    name: "칭기즈 칸 박물관",
+                    title: "원통형 용기",
+                    description: "뚜껑이 있는 작은 원통형 놋쇠 용기. 뚜껑에는 짜임새 있는 패턴이 장식되어 있으며, 상단이 약간 볼록하게 디자인됨. 몸체에는 귀족이 왕비와 함께 앉아 있는 모습, 양쪽에 음악가와 시종들이 새겨져 있으며, 바닥에는 태양 광선을 형상화한 선 패턴이 조각되어 있음.",
+                    specification: "유물 설명",
+                    spec: "높이: 7.5cm, 지름: 4cm",
+                    audio: "오디오 가이드",
+                    audio_text: "이 고대 청동 솥의 역사를 들어보세요",
+                    historical: "역사적 배경",
+                    similar: "유사 유물",
+                    footer: "© 2025 고대 경이 박물관 | 한 유물씩 역사를 풀어가다"
+                }
+            },
+            ch: {
+                translation: {
+                    name: "成吉思汗博物馆",
+                    title: "圆筒形容器",
+                    description: "带盖的小型圆筒形黄铜容器。盖子上装饰有编织图案，顶部略微隆起。主体部分雕刻有贵族与王后同坐的画面，左右两侧分别刻有乐师和侍从，底部则刻有太阳光线形条纹图案。",
+                    specification: "文物描述",
+                    spec: "高度：7.5厘米，直径：4厘米",
+                    audio: "音频导览",
+                    audio_text: "聆听这件古代青铜锅的历史",
+                    historical: "历史背景",
+                    similar: "类似文物",
+                    footer: "© 2025 古代奇迹博物馆 | 逐一揭开历史的奥秘"
+                }
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const languageSelector = document.getElementById("language-selector");
+            let savedLang = localStorage.getItem("language") || "en";
+
+            i18next.init({
+                lng: savedLang,
+                resources
+            }, function (err, t) {
+                document.title = t('title');
+                document.querySelectorAll("[data-i18n]").forEach(el => {
+                    el.textContent = t(el.getAttribute("data-i18n"));
+                });
+            });
+
+            languageSelector.value = savedLang;
+
+            languageSelector.addEventListener("change", function () {
+                const lang = this.value;
+                localStorage.setItem("language", lang);
+                i18next.changeLanguage(lang, function (err, t) {
+                    document.title = t('title');
+                    document.querySelectorAll("[data-i18n]").forEach(el => {
+                        el.textContent = t(el.getAttribute("data-i18n"));
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
